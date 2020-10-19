@@ -1,0 +1,32 @@
+<div class="navbar">
+    <input type="checkbox" id="x7" />
+    <ul id="main">
+        <li class="x1" id="username">Hello
+            <%= username %>
+        </li>
+        <a href="/">
+            <li class="x1">Strona główna</li>
+        </a>
+        <a href="#" id="trigger">
+            <li class="x1">
+                Menu &nbsp;
+                <span id="caret"></span>
+            </li>
+        </a>
+        <ul id="dropdown">
+            <a href="/member">
+                <li>Użytkownicy</li>
+            </a>
+            <% if(!username) {%>
+            <a href="/login">
+                <li>Login</li>
+            </a>
+            <% }
+            if(username) {%>
+            <a href="/logout">
+                <li>Wyloguj</li>
+            </a>
+            <% }%>
+        </ul>
+    </ul>
+</div>

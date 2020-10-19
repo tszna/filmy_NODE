@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/fontawesome/4.2.0/css/font-awesome.min.css" />
+  <link href="https://fonts.googleapis.com/css?family=Slabo+27px|Open+Sans" rel="stylesheet" type="text/css" />
+  <link rel="stylesheet" href="/stylesheets/style.css" />
+</head>
+
+<body>
+  <%- include navbar.ejs %>
+  <div class="main">
+    <div class="container" id="">
+      <h2>User Permissions :
+        <%= username1 %>
+      </h2>
+      <div class="form-group">
+        <form action="/updatePermission" method="POST" id="updatepermission">
+          <div class="row">
+            <input type="checkbox" id="year" name="year" value="1" />
+            <label for="year"> Year</label><br />
+          </div>
+          <div class="row">
+            <input type="checkbox" id="category" name="category" value="1" />
+            <label for="category"> Category</label><br />
+          </div>
+          <div class="row">
+            <input type="checkbox" id="title" name="title" value="1" />
+            <label for="title"> Title</label><br />
+          </div>
+          <div class="row">
+            <input type="checkbox" id="director" name="director" value="1" />
+            <label for="director"> Director</label><br /><br />
+          </div>
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+          <input type="hidden" name="data" value="" id="data" />
+          <button type="button" class="success" id="save">Save</button>
+          <a href="/member"><button type="button" class="return">Return</button></a>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function htmlDecode(input) {
+      var e = document.createElement('div');
+      e.innerHTML = input;
+      return e.childNodes.length === 0 ? '' : e.childNodes[0].nodeValue;
+    }
+
+    window.onload = function () {
+      loadData();
+    };
+
+    function loadData() {
+      var permissions = JSON.parse(
+        htmlDecode('<%= JSON.stringify(permissions) %> ')
+      );
+      var token = JSON.parse(htmlDecode(' <%= JSON.stringify(csrfToken) %>'));
+      var userID = JSON.parse(htmlDecode(' <%= JSON.stringify(userID) %> '));
+
+      for (let i = 0; i < permissions.length; i++) {
+        var permission_id = permissions[i].permission_id;
+        switch (permission_id) {
+          case 1:
+            document.getElementById('year').setAttribute('checked', true);
+            break;
+          case 2:
+            document.getElementById('category').setAttribute('checked', true);
+            break;
+          case 3:
+            document.getElementById('title').setAttribute('checked', true);
+            break;
+          case 4:
+            document.getElementById('director').setAttribute('checked', true);
+            break;
+        }
+      }
+
+      document.getElementById('save').onclick = function () {
+        var data = [];
+        if (document.getElementById('year').checked == true) {
+          data.push(1);
+        }
+        if (document.getElementById('category').checked == true) {
+          data.push(2);
+        }
+        if (document.getElementById('title').checked == true) {
+          data.push(3);
+        }
+        if (document.getElementById('director').checked == true) {
+          data.push(4);
+        }
+
+        var requestdata = {
+          userID: userID,
+          data: data
+        };
+        requestdata = JSON.stringify(requestdata);
+
+        document.getElementById('data').setAttribute('value', requestdata);
+        document.getElementById('updatepermission').submit();
+      };
+    }
+  </script>
+</body>
+
+</html>
